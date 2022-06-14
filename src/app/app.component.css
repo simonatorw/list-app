@@ -1,0 +1,14 @@
+h2 {
+  font-family: verdana, arial;
+  color: #666;
+  font-size: 16px;
+}
+
+ul {
+  list-style: none;
+}
+
+.thumbnail {
+  height: 60px;
+  margin-bottom: 60px;
+}
