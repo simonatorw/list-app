@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import { ShowAllAction } from './store/actions/list.actions';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-root',
@@ -7,12 +10,22 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'list-app';
-  data: any[] = [];
+  data: Observable<any[]>;
+  list: any[] = [];
+  sub: any = null;
 
-  async ngOnInit() {
-    const response = await fetch('https://jsonplaceholder.typicode.com/photos');
-    this.data = await response.json();
+  constructor(private store: Store<{ list: any[] }>) {
+    this.data = this.store.select('list');
+  }
 
-    console.log(this.data);
+  ngOnInit() {
+    this.store.dispatch(ShowAllAction());
+    this.sub = this.data.subscribe(datas => {
+      this.list = [ ...Object.values(datas) ];
+    });
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }
